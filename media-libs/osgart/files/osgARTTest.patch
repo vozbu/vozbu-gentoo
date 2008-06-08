@@ -1,0 +1,50 @@
+--- src/osgARTTest/osgARTTest.cpp	2006-12-13 02:06:31.000000000 +0300
++++ src/osgARTTest/osgARTTest.cpp	2008-03-28 10:13:18.000000000 +0300
+@@ -18,8 +18,7 @@
+  *
+  */
+ 
+-#include <Producer/RenderSurface>
+-#include <osgProducer/Viewer>
++#include <osgViewer/Viewer>
+ 
+ #include <osg/Notify>
+ #include <osg/Node>
+@@ -50,9 +49,7 @@
+ 
+ 	osgARTInit(&argc, argv);
+ 	
+-	osgProducer::Viewer viewer;
+-	viewer.setUpViewer(osgProducer::Viewer::ESCAPE_SETS_DONE);
+-	viewer.getCullSettings().setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
++	osgViewer::Viewer viewer;
+ 
+ #ifndef __linux
+ 	// somehow on Ubuntu Dapper this ends up in a segmentation fault
+@@ -196,9 +193,7 @@
+ 	
+     while (!viewer.done()) 
+ 	{
+-		
+-		viewer.sync();	
+-		
++
+ 		//update the video (get new frame)
+ 		video->update();
+ 
+@@ -206,15 +201,10 @@
+ 		tracker->setImage(video.get());
+ 		tracker->update();
+ 		
+-        viewer.update();
+         viewer.frame();
+ 	
+     }
+     
+-	viewer.sync();
+-    viewer.cleanup_frame();
+-    viewer.sync();
+-
+ 	//stop the video
+ 	video->stop();
+ 	//close the video
