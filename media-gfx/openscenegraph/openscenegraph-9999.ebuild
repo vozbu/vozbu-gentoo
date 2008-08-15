@@ -22,6 +22,7 @@ DEPEND="virtual/opengl
 	>=dev-util/cmake-2.4.7
 	>=media-libs/libpng-1.2 
 	media-libs/lib3ds"
+RDEPEND="$DEPEND"
 
 src_compile() {
 	CMAKE_CONFIG="-DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release"

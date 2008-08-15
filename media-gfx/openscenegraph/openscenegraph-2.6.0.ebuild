@@ -20,6 +20,7 @@ DEPEND="virtual/opengl
 	>=dev-util/cmake-2.4.7
 	>=media-libs/libpng-1.2 
 	media-libs/lib3ds"
+RDEPEND="$DEPEND"
 
 S="${WORKDIR}/${MY_P}"
 
