@@ -20,8 +20,7 @@ DEPEND="virtual/opengl
 	>=dev-util/cmake-2.4.7
 	>=media-libs/libpng-1.2 
 	media-libs/lib3ds
-	xine? (
-	>=media-libs/xine-lib-1.1.15-r1 )"
+	xine? ( >=media-libs/xine-lib-1.1.15-r1 )"
 RDEPEND="$DEPEND"
 
 S="${WORKDIR}/${MY_P}"

@@ -9,7 +9,7 @@ SRC_URI="http://www.openscenegraph.org/downloads/developer_releases/${MY_P}.zip"
 SLOT="0"
 LICENSE="OSGPL-2.1"
 KEYWORDS="x86 amd64"
-IUSE="debug examples"
+IUSE="debug examples xine"
 
 DEPEND="virtual/opengl 
 	app-arch/unzip
@@ -19,7 +19,8 @@ DEPEND="virtual/opengl
 	media-libs/freetype
 	>=dev-util/cmake-2.4.7
 	>=media-libs/libpng-1.2 
-	media-libs/lib3ds"
+	media-libs/lib3ds
+	xine? ( >=media-libs/xine-lib-1.1.15-r1 )"
 RDEPEND="$DEPEND"
 
 S="${WORKDIR}/${MY_P}"
