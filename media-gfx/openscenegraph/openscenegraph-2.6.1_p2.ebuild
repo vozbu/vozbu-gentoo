@@ -4,15 +4,16 @@
 
 EAPI=2
 
-inherit subversion
-
-ESVN_REPO_URI="http://www.openscenegraph.org/svn/osg/OpenSceneGraph/trunk"
+inherit eutils versionator
 
 DESCRIPTION="Cross platform, object orientated threading library maintained by the OpenSceneGraph team."
 HOMEPAGE="http://www.openscenegraph.org/"
+MY_PV=$(get_version_component_range 1-3)
+MY_P="OpenSceneGraph-${MY_PV}"
+SRC_URI="http://www.openscenegraph.org/downloads/developer_releases/${MY_P}.zip"
 SLOT="0"
 LICENSE="OSGPL-2.1"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="x86 amd64"
 IUSE="debug doc examples xine"
 
 MY_CDEPEND="virtual/opengl
@@ -28,6 +29,15 @@ DEPEND="$MY_CDEPEND
 	>=dev-util/cmake-2.4.7
 	doc? ( app-doc/doxygen )"
 RDEPEND="$MY_CDEPEND"
+
+S="${WORKDIR}/${MY_P}"
+
+src_unpack() {
+	unpack "${A}"
+	cd "${S}"
+	# Apply all patches for this version from single file
+	epatch ${FILESDIR}/${PV}.patch
+}
 
 src_configure() {
 	CMAKE_CONFIG="-DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release"
@@ -50,8 +60,7 @@ src_configure() {
 src_compile() {
 	cd build
 	emake || die "compilation failed"
-	use doc && emake doc_openscenegraph || die "building documentation failed, try with USE=-doc"
-	use doc && emake doc_openthreads
+	use doc && emake DoxygenDoc || die "building documentation failed, try with USE=-doc"
 
 	if use debug ; then
 		cd ../build_debug
@@ -71,7 +80,7 @@ src_install() {
 
 	cd build
 	emake DESTDIR=${D} install || die "einstall failed"
-	use doc && dosym /usr/doc/OpenSceneGraphReferenceDocs /usr/share/doc/${PF}/html
+	use doc && dohtml -r doc/OpenSceneGraphReferenceDocs/*
 	cd ../
 	insinto "/usr/lib/pkgconfig"
 	doins packaging/pkgconfig/openthreads.pc
