@@ -10,8 +10,8 @@ DESCRIPTION="Cross platform, object orientated threading library maintained by t
 HOMEPAGE="http://www.openscenegraph.org/"
 SLOT="0"
 LICENSE="OSGPL-2.1"
-KEYWORDS="~x86 ~amd64"
-IUSE="debug examples"
+KEYWORDS="~amd64 ~x86"
+IUSE="debug examples xine"
 
 DEPEND="virtual/opengl 
 	app-arch/unzip

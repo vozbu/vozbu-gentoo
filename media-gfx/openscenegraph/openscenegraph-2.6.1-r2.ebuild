@@ -45,7 +45,7 @@ src_compile() {
 	emake || die "compile failed"
 
 	if use debug ; then
-		CMAKE_DEBUG_CONFIG="-DCMAKE_INSTALL_PREFIX=/usr	-DCMAKE_BUILD_TYPE=Debug -DBUILD_OSG_APPLICATIONS=OFF"
+		CMAKE_DEBUG_CONFIG="-DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug -DBUILD_OSG_APPLICATIONS=OFF"
 		cd ../
 		mkdir build_debug
 		cd build_debug
