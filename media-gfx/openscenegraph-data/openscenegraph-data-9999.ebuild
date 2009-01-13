@@ -2,25 +2,19 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: valery.bickov $
 
-inherit eutils
+inherit subversion 
+
+ESVN_REPO_URI="http://www.openscenegraph.org/svn/osg/OpenSceneGraph-Data/trunk"
 
 DESCRIPTION="Data pack for OpenSceneGraph examples"
 HOMEPAGE="http://www.openscenegraph.org/"
-MY_P="OpenSceneGraph-Data"
-S="${WORKDIR}/${MY_P}"
-SRC_URI="http://www.openscenegraph.org/downloads/data/${MY_P}-${PV}.zip"
 SLOT="0"
 LICENSE="OSGPL-2.1"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=""
 RDEPEND=""
-
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-}
 
 src_install() {
 	insinto "/usr/share/OpenSceneGraph/Data"
@@ -30,9 +24,9 @@ src_install() {
 }
 
 pkg_postinst() {
-    elog
-    elog "Run"
-    elog "# source /etc/profile"
-    elog "if you want to use OpenSceneGraph examples"
-    elog "in this session."
+	elog
+	elog "Run"
+	elog "# source /etc/profile"
+	elog "if you want to use OpenSceneGraph examples"
+	elog "in this session."
 }
