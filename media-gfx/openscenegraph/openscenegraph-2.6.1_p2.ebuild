@@ -42,7 +42,7 @@ src_unpack() {
 src_configure() {
 	CMAKE_CONFIG="-DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release"
 	use examples && CMAKE_CONFIG="${CMAKE_CONFIG} -DBUILD_OSG_EXAMPLES:BOOL=ON"
-	use doc && CMAKE_CONFIG="${CMAKE_CONFIG} -DBUILD_DOCUMENTATION:BOOL=ON"
+	use doc && CMAKE_CONFIG="${CMAKE_CONFIG} -DBUILD_REF_DOCS:BOOL=ON"
 
 	mkdir build
 	cd build
@@ -60,7 +60,9 @@ src_configure() {
 src_compile() {
 	cd build
 	emake || die "compilation failed"
-	use doc && emake DoxygenDoc || die "building documentation failed, try with USE=-doc"
+	if use doc ; then
+		emake DoxygenDoc || die "building documentation failed, try with USE=-doc"
+	fi
 
 	if use debug ; then
 		cd ../build_debug

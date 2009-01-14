@@ -50,8 +50,10 @@ src_configure() {
 src_compile() {
 	cd build
 	emake || die "compilation failed"
-	use doc && emake doc_openscenegraph || die "building documentation failed, try with USE=-doc"
-	use doc && emake doc_openthreads
+	if use doc ; then
+		emake doc_openscenegraph || die "building documentation failed, try with USE=-doc"
+		emake doc_openthreads
+	fi
 
 	if use debug ; then
 		cd ../build_debug
