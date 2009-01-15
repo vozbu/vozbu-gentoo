@@ -2,10 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit eutils subversion
+inherit subversion
 
 ESVN_REPO_URI="svn://projects.tevs.eu/osgPPU/trunk"
-ESVN_PATCHES="*.patch"
 
 DESCRIPTION="Post processing library for using with OpenSceneGraph"
 HOMEPAGE="http://projects.tevs.eu/osgppu"
