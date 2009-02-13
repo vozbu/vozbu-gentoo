@@ -1,0 +1,11 @@
+--- src/wrappers/reflect_osg_autotransform.cpp	2007-11-02 07:38:36.000000000 +0300
++++ src/wrappers/reflect_osg_autotransform.cpp	2009-02-13 11:20:41.000000000 +0300
+@@ -199,7 +199,7 @@
+ 		// Getter overloaded, must specify one type
+ 		typedef const Vec3 & (osg::AutoTransform::*getScaleFN)() const;
+ 		// Setter overloaded, must specify one type
+-		typedef void (osg::AutoTransform::*setScaleFN)(const Vec3 &) ;
++		typedef void (osg::AutoTransform::*setScaleFN)(const Vec3d &) ;
+ 		return new GetterSetterProperty<Vec3, osg::AutoTransform>("_scale", _object.get(), (getScaleFN)&osg::AutoTransform::getScale, (setScaleFN)&osg::AutoTransform::setScale);
+ 	}
+ 	if (name == "_initialBound") {

@@ -1,0 +1,10 @@
+--- src/gui/cameras/cameramanager.h	2007-07-01 22:29:03.000000000 +0400
++++ src/gui/cameras/cameramanager.h	2009-02-12 20:47:05.000000000 +0300
+@@ -5,6 +5,7 @@
+ #include <osg/Referenced>
+ #include <osg/Matrixd>
+ #include <osg/Vec2>
++#include <osg/Vec3>
+ #include <vector>
+ #include <string>
+ #include <osg/BoundingSphere>
