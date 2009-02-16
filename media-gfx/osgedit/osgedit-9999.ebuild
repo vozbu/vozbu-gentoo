@@ -34,5 +34,6 @@ src_compile() {
 }
 
 src_install() {
-	DESTDIR="${D}" scons install || die "Install failed"
+	# Doesn't call die because install script contains errors
+	DESTDIR="${D}" scons install
 }
