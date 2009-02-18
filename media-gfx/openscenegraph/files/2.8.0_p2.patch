@@ -1,0 +1,333 @@
+diff --git a/src/osgPlugins/xine/ReaderWriterXine.cpp b/src/osgPlugins/xine/ReaderWriterXine.cpp
+index c28ee85..623059c 100644
+--- a/src/osgPlugins/xine/ReaderWriterXine.cpp
++++ b/src/osgPlugins/xine/ReaderWriterXine.cpp
+@@ -30,8 +30,7 @@ class XineImageStream : public osg::ImageStream
+             _visual(0),
+             _stream(0),
+             _event_queue(0),
+-            _ready(false),
+-            _volume(-1.0)
++            _ready(false)
+         {
+             setOrigin(osg::Image::TOP_LEFT);
+         }
+@@ -41,28 +40,28 @@ class XineImageStream : public osg::ImageStream
+             ImageStream(image,copyop) {}
+ 
+         META_Object(osgXine,XineImageStream);
+-        
++
+         void setVolume(float volume)
+         {
+-            _volume = osg::minimum(osg::maximum(volume,0.0f),1.0f);
+-            if (_stream) 
++            if (_stream)
+             {
+-                xine_set_param(_stream, XINE_PARAM_AUDIO_VOLUME, static_cast<int>(_volume*100.0f));
+-                osg::notify(osg::NOTICE)<<"Setting volume "<<_volume<<std::endl;
++                volume = osg::minimum(osg::maximum(volume,0.0f),1.0f);
++                xine_set_param(_stream, XINE_PARAM_AUDIO_AMP_LEVEL, static_cast<int>(volume*100.0f));
++                osg::notify(osg::NOTICE)<<"Setting volume "<<volume<<std::endl;
+             }
+         }
+-        
++
+         float getVolume() const
+         {
+-            return _volume;
++            return xine_get_param(_stream, XINE_PARAM_AUDIO_AMP_LEVEL) / 100.0f;
+         }
+ 
+         bool open(xine_t* xine, const std::string& filename)
+         {
+             if (filename==getFileName()) return true;
+-            
++
+             _xine = xine;
+-        
++
+             // create visual
+             rgbout_visual_info_t* visual = new rgbout_visual_info_t;
+             visual->levels = PXLEVEL_ALL;
+@@ -82,38 +81,25 @@ class XineImageStream : public osg::ImageStream
+                 osg::notify(osg::NOTICE)<<"XineImageStream::open() : Failed to create video driver"<<std::endl;
+                 return false;
+             }
+-            
+ 
+             // set up stream
+             _stream = xine_stream_new(_xine, _ao, _vo);
+-            
+-            if (_stream)
+-            {
+-                if (_volume < 0.0)
+-                {
+-                    _volume = static_cast<float>(xine_get_param(_stream, XINE_PARAM_AUDIO_VOLUME))/100.0f;
+-                }
+-                else
+-                {
+-                    setVolume(_volume);
+-                }
+-            }
+ 
+             _event_queue = xine_event_new_queue(_stream);
+             xine_event_create_listener_thread(_event_queue, event_listener, this);
+ 
+             int result = xine_open(_stream, filename.c_str());
+-            
++
+             if (result==0)
+             {
+                 osg::notify(osg::INFO)<<"XineImageStream::open() : Could not ready movie file."<<std::endl;
+                 close();
+                 return false;
+             }
+-            
+-            
++
++
+             _ready = false;
+-            
++
+             int width = xine_get_stream_info(_stream,XINE_STREAM_INFO_VIDEO_WIDTH);
+             int height = xine_get_stream_info(_stream,XINE_STREAM_INFO_VIDEO_HEIGHT);
+             allocateImage(width,height,1,GL_RGB,GL_UNSIGNED_BYTE,1);
+@@ -121,19 +107,33 @@ class XineImageStream : public osg::ImageStream
+             osg::notify(osg::INFO)<<"XineImageStream::open() size "<<width<<" "<<height<<std::endl;
+ 
+             // play();
+-            
++
+             return true;
+ 
+         }
+ 
++        virtual double getLength() const
++        {
++            if (_stream)
++            {
++                int length;
++                if (xine_get_pos_length (_stream, 0, 0, &length))
++                    return length / 1000.0;
++            }
++            return 0;
++        }
++
+         virtual void play()
+         {
+             if (_status!=PLAYING && _stream)
+             {
+                 if (_status==PAUSED)
+                 {
+-                    xine_set_param (_stream, XINE_PARAM_SPEED, XINE_SPEED_NORMAL);
+-                    _status=PLAYING;
++//                      xine_set_param (_stream, XINE_PARAM_SPEED, XINE_SPEED_NORMAL);
++                     if (xine_play(_stream, 0, static_cast<int>(getReferenceTime()*1000)))
++                         _status=PLAYING;
++                     else
++                         osg::notify(osg::NOTICE)<<"Error starting play!!!"<<std::endl;
+                 }
+                 else
+                 {
+@@ -162,28 +162,56 @@ class XineImageStream : public osg::ImageStream
+             if (_status==PAUSED || _status==INVALID) return;
+ 
+             _status=PAUSED;
+-            
++
+             if (_stream)
+             {
+-                xine_set_param (_stream, XINE_PARAM_SPEED, XINE_SPEED_PAUSE);
++                //xine_set_param (_stream, XINE_PARAM_SPEED, XINE_SPEED_PAUSE);
++                xine_stop(_stream);
+             }
+         }
+ 
+         virtual void rewind()
+         {
+-            if (_status==INVALID) return;
++            seek(0.0);
++        }
++
++        virtual void quit(bool /*waitForThreadToExit*/ = true)
++        {
++            close();
++        }
+ 
+-            _status=REWINDING;
++        virtual void seek(double time)
++        {
+             if (_stream)
+             {
+-                osg::notify(osg::INFO)<<"Warning::XineImageStream::rewind() - rewind disabled at present."<<std::endl;
+-                //xine_trick_mode(_stream,XINE_TRICK_MODE_FAST_REWIND,0);
++                xine_play(_stream, 0, static_cast<int>(time*1000));
++                if (_status == PAUSED)
++                    xine_stop(_stream);
++                    //xine_set_param (_stream, XINE_PARAM_SPEED, XINE_SPEED_PAUSE);
++                if (_status == INVALID)
++                    xine_stop(_stream);
++                osg::notify(osg::NOTICE) << "Seeking xine stream at " << time << std::endl;
+             }
+         }
+ 
+-        virtual void quit(bool /*waitForThreadToExit*/ = true)
++        virtual void setReferenceTime(double time)
+         {
+-            close();
++            seek(time);
++        }
++
++        virtual double getReferenceTime() const
++        {
++            if (_stream)
++            {
++                int sPosTime;
++                if (!xine_get_pos_length (_stream, 0, &sPosTime, 0))
++                    sPosTime = 0;
++                const double sReferenceTime = sPosTime / 1000.0;
++                osg::notify(osg::NOTICE) << "Reference time for xine stream is " << sReferenceTime << std::endl;
++                return sReferenceTime;
++            }
++            osg::notify(osg::NOTICE) << "Reference time for xine stream is 0 bacause stream is not defined" << std::endl;
++            return 0.0;
+         }
+ 
+         static void my_render_frame(uint32_t width, uint32_t height, void* data, void* userData)
+@@ -192,7 +220,7 @@ class XineImageStream : public osg::ImageStream
+ 
+             GLenum pixelFormat = GL_BGRA;
+ 
+-        #if 0   
++        #if 0
+             if (!imageStream->_ready)
+             {
+                 imageStream->allocateImage(width,height,1,pixelFormat,GL_UNSIGNED_BYTE,1);
+@@ -228,11 +256,8 @@ class XineImageStream : public osg::ImageStream
+         xine_stream_t*          _stream;
+         xine_event_queue_t*     _event_queue;
+         bool                    _ready;
+-        float                   _volume;
+ 
+     protected:
+-
+-
+         virtual ~XineImageStream()
+         {
+             osg::notify(osg::INFO)<<"Killing XineImageStream"<<std::endl;
+@@ -248,7 +273,7 @@ class XineImageStream : public osg::ImageStream
+             if (_stream)
+             {
+                   osg::notify(osg::INFO)<<"  Closing stream"<<std::endl;
+-                
++
+                   xine_close(_stream);
+ 
+                   osg::notify(osg::INFO)<<"  Disposing stream"<<std::endl;
+@@ -257,9 +282,9 @@ class XineImageStream : public osg::ImageStream
+                   _stream = 0;
+             }
+ 
+-
+             if (_event_queue)
+             {
++                xine_event_dispose_queue(_event_queue);
+                 _event_queue = 0;
+             }
+ 
+@@ -267,18 +292,18 @@ class XineImageStream : public osg::ImageStream
+             {
+                osg::notify(osg::INFO)<<"  Closing audio driver"<<std::endl;
+ 
+-                xine_close_audio_driver(_xine, _ao);  
+-                
+-                _ao = 0;
++               xine_close_audio_driver(_xine, _ao);
++
++               _ao = 0;
+             }
+-            
++
+             if (_vo)
+             {
+                osg::notify(osg::INFO)<<"  Closing video driver"<<std::endl;
+ 
+-                xine_close_video_driver(_xine, _vo);  
+-                
+-                _vo = 0;
++               xine_close_video_driver(_xine, _vo);
++
++               _vo = 0;
+             }
+ 
+            osg::notify(osg::INFO)<<"closed XineImageStream "<<std::endl;
+@@ -297,6 +322,10 @@ class XineImageStream : public osg::ImageStream
+                     //rewind();
+                     xine_play(xis->_stream, 0, 0);
+                 }
++                else
++                {
++                    xis->_status = INVALID;
++                }
+                 break;
+             }
+         }
+@@ -320,37 +349,37 @@ class ReaderWriterXine : public osgDB::ReaderWriter
+             supportsExtension("mpv","Mpeg movie format");
+             supportsExtension("wmv","");
+             supportsExtension("xine","Xine plugin Pseduo plugin");
+-        
++
+             _xine = xine_new();
+ 
+             const char* user_home = xine_get_homedir();
+             if(user_home)
+             {
+                 char* cfgfile = NULL;
+-                int result = asprintf(&(cfgfile), "%s/.xine/config", user_home);                
++                int result = asprintf(&(cfgfile), "%s/.xine/config", user_home);
+                 if (result>0) xine_config_load(_xine, cfgfile);
+             }
+ 
+             xine_init(_xine);
+-            
++
+             register_rgbout_plugin(_xine);
+         }
+-     
++
+         virtual ~ReaderWriterXine()
+         {
+             osg::notify(osg::INFO)<<"~ReaderWriterXine()"<<std::endl;
+-        
++
+             if (_xine) xine_exit(_xine);
+             _xine = NULL;
+         }
+-        
++
+         virtual const char* className() const { return "Xine ImageStream Reader"; }
+ 
+         virtual ReadResult readImage(const std::string& file, const osgDB::ReaderWriter::Options* options) const
+         {
+             std::string ext = osgDB::getLowerCaseFileExtension(file);
+             if (!acceptsExtension(ext)) return ReadResult::FILE_NOT_HANDLED;
+-            
++
+             std::string fileName;
+             if (ext=="xine")
+             {
+diff --git a/src/osgPlugins/xine/video_out_rgb.c b/src/osgPlugins/xine/video_out_rgb.c
+index c5e6927..95e6a5e 100644
+--- a/src/osgPlugins/xine/video_out_rgb.c
++++ b/src/osgPlugins/xine/video_out_rgb.c
+@@ -100,6 +100,8 @@ clear(void* dest, uint32_t size)
+ 		: "=&D" (dest)
+ 		: "r" (size >> 2), "r" (size & 3), "0" (dest)
+ 		: "eax", "ecx");
++#else
++	memset( dest, 0, size );
+ #endif
+ }
+ 
