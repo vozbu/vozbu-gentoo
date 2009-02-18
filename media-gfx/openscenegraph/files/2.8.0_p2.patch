@@ -1,5 +1,3 @@
-diff --git a/src/osgPlugins/xine/ReaderWriterXine.cpp b/src/osgPlugins/xine/ReaderWriterXine.cpp
-index c28ee85..623059c 100644
 --- a/src/osgPlugins/xine/ReaderWriterXine.cpp
 +++ b/src/osgPlugins/xine/ReaderWriterXine.cpp
 @@ -30,8 +30,7 @@ class XineImageStream : public osg::ImageStream
