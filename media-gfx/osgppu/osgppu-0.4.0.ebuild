@@ -3,12 +3,11 @@
 # $Header: $
 
 EAPI=2
-inherit subversion
-
-ESVN_REPO_URI="svn://projects.tevs.eu/osgPPU/trunk"
 
 DESCRIPTION="Post processing library for using with OpenSceneGraph"
 HOMEPAGE="http://projects.tevs.eu/osgppu"
+MY_P="osgPPU-0.4.0"
+SRC_URI="http://projects.tevs.eu/osgppu/downloads/15 -> $MY_P.tar.gz"
 
 LICENSE="OSGPL-2.1"
 SLOT="0"
@@ -19,7 +18,7 @@ RDEPEND=">=media-gfx/openscenegraph-2.8.0"
 DEPEND="$RDEPEND
 	>=dev-util/cmake-2.4.5"
 
-S=$S/$PF
+S=$WORKDIR/$MY_P
 
 src_configure() {
 	CMAKE_CONFIG="-DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release"
