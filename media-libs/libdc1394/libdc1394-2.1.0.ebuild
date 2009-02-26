@@ -14,6 +14,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="X doc +juju usb"
 
 DEPEND=">=sys-libs/libraw1394-1.2.0
+		doc? ( app-doc/doxygen )
 		juju? ( >=sys-kernel/linux-headers-2.6.23-r3 )
 		usb? ( >=dev-libs/libusb-1.0 )
 		X? ( x11-libs/libSM x11-libs/libXv )"
