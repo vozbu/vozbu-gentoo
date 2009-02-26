@@ -18,7 +18,7 @@ IUSE="test"
 # Note builds with only >=gcc-3.4
 DEPEND="dev-libs/libxml2
 	dev-libs/libpcre
-	test? (dev-libs/boost)"
+	test? ( dev-libs/boost )"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_PN}"
