@@ -94,7 +94,6 @@ src_install() {
 	cd build
 	emake DESTDIR=${D} install || die "Install failed"
 	use doc && dosym /usr/doc/OpenSceneGraphReferenceDocs /usr/share/doc/${PF}/html
-	cd ../
 	insinto "/usr/lib/pkgconfig"
 	doins packaging/pkgconfig/openthreads.pc
 	doins packaging/pkgconfig/openscenegraph.pc
