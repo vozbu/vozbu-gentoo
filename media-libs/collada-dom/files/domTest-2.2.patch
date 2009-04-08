@@ -1,0 +1,13 @@
+--- dom/test/1.4/domTest.cpp	2008-05-09 19:50:30.000000000 +0400
++++ dom/test/1.4/domTest.cpp	2008-05-09 19:53:55.000000000 +0400
+@@ -1535,7 +1535,9 @@
+	dataPath() = (fs::path(argv[0]).branch_path()/"domTestData/").normalize();
+	if (!fs::exists(dataPath()))
+		dataPath() = (fs::path(argv[0]).branch_path()/"../../test/1.4/data/").normalize();
+-	tmpPath() = dataPath() / "tmp";
++	if (!fs::exists(dataPath()))
++		dataPath() = fs::path("/usr/share/collada-dom/data/").normalize();
++	tmpPath() = fs::path("/tmp/collada-dom");
+	tmpDir tmp(tmpPath(), !leaveTmpFiles);
+
+	if (checkTests(tests) == false)
