@@ -3,15 +3,23 @@
 # $Header: $
 
 EAPI=2
-inherit cmake-utils subversion
-
-ESVN_REPO_URI="http://www.openscenegraph.org/svn/osg/OpenSceneGraph/trunk"
+inherit cmake-utils eutils versionator
 
 DESCRIPTION="Open source high performance 3D graphics toolkit"
 HOMEPAGE="http://www.openscenegraph.org/projects/osg/"
-SLOT="0"
+
+MY_PV=$(get_version_component_range 1-3)
+MY_P="OpenSceneGraph-${MY_PV}"
+if [ $(get_version_component_range 3) -eq 0 ] ; then
+	MY_SERIES=$(get_version_component_range 1-2);
+else
+	MY_SERIES=$(get_version_component_range 1-3);
+fi
+SRC_URI="http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-${MY_SERIES}/source/${MY_P}.zip"
+
 LICENSE="wxWinLL-3 LGPL-2.1"
-KEYWORDS="~amd64 ~x86"
+SLOT="0"
+KEYWORDS="amd64 ~ppc ~sparc x86"
 IUSE="collada curl doc examples gif jpeg jpeg2k osgapps pdf png svg tiff truetype vnc xine xrandr xulrunner"
 
 RDEPEND="virtual/opengl
@@ -37,8 +45,33 @@ DEPEND="${RDEPEND}
 	app-arch/unzip
 	doc? ( app-doc/doxygen )"
 
+S="${WORKDIR}"/${MY_P}
+
+DOCS="AUTHORS.txt ChangeLog NEWS.txt"
+
+src_prepare() {
+	epatch "${FILESDIR}"/${PV}-magicoff.patch
+	# Apply all patches for this version from single file
+	if [ -f ${FILESDIR}/${PV}.patch ] ; then
+		epatch ${FILESDIR}/${PV}.patch || die "Patch failed"
+	fi
+}
+
 src_configure() {
 	mycmakeargs="-DOSG_USE_REF_PTR_IMPLICIT_OUTPUT_CONVERSION:BOOL=OFF"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable curl CURL)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable gif GIF)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable jpeg JPEG)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable jpeg2k JPEG2K)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable pdf PDF)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable png PNG)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable svg SVG)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable tiff TIFF)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable truetype FREETYPE)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable xine XINE)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable xrandr XRANDR)"
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable xulrunner XUL)"
+
 	mycmakeargs="${mycmakeargs} $(cmake-utils_use doc BUILD_DOCUMENTATION)"
 	mycmakeargs="${mycmakeargs} $(cmake-utils_use examples BUILD_OSG_EXAMPLES)"
 	mycmakeargs="${mycmakeargs} $(cmake-utils_use osgapps BUILD_OSG_APPLICATIONS)"
