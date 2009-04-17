@@ -1,0 +1,22 @@
+--- src/example/glow/glow.cpp	2009-04-17 17:43:09.000000000 +0400
++++ src/example/glow/glow.cpp	2009-04-17 17:43:59.000000000 +0400
+@@ -124,7 +124,7 @@
+     // create subnode, which will represented the glowed scene
+     osg::Group* toGlow = new osg::Group;
+     toGlow->getOrCreateStateSet()->setAttributeAndModes(matirial.get(), StateAttribute::ON);
+-    toGlow->addChild(transform_3);
++    toGlow->addChild(transform_3.get());
+     glowedScene = toGlow;
+ 
+ 
+--- src/example/hdr/osgppu.cpp	2009-04-17 17:44:37.000000000 +0400
++++ src/example/hdr/osgppu.cpp	2009-04-17 17:45:03.000000000 +0400
+@@ -154,7 +154,7 @@
+                 {
+                     printf("File not found: Data/Images/reflect.rgb !\n");
+                 }
+-                img->setImage(imgfile);
++                img->setImage(imgfile.get());
+                 unittex->setTexture(img);
+ 
+                 // create picture in picture ppu

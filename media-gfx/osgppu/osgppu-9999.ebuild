@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=2
-inherit subversion
+inherit cmake-utils eutils subversion
 
 ESVN_REPO_URI="svn://projects.tevs.eu/osgPPU/trunk"
 
@@ -16,31 +16,17 @@ KEYWORDS="~amd64 ~x86"
 IUSE="examples"
 
 RDEPEND=">=media-gfx/openscenegraph-2.8.0"
-DEPEND="$RDEPEND
-	>=dev-util/cmake-2.4.5"
+DEPEND="$RDEPEND"
 
 S=$S/$PF
 
-src_configure() {
-	CMAKE_CONFIG="-DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release"
-	mkdir build
-	cd build
-	cmake ../ $CMAKE_CONFIG || die "Configure failed"
-}
-
-src_compile() {
-	cd build
-	emake || die "Compile failed"
-}
-
 src_install() {
-	cd build
-	emake DESTDIR=$D install || die "Install failed"
+	cmake-utils_src_install
 	if use examples ; then
 		exeinto /usr/share/osgPPU/bin
-		doexe bin/*
+		doexe $CMAKE_BUILD_DIR/bin/*
 		insinto /usr/share/osgPPU
-		doins -r ../Data
+		doins -r Data
 		dosym ../Data /usr/share/osgPPU/bin
 	fi
 }

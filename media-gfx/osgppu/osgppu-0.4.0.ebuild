@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI=2
+inherit cmake-utils eutils
 
 DESCRIPTION="Post processing library for using with OpenSceneGraph"
 HOMEPAGE="http://projects.tevs.eu/osgppu"
@@ -12,34 +13,31 @@ SRC_URI="http://projects.tevs.eu/osgppu/downloads/15 -> $MY_P.tar.gz"
 LICENSE="OSGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="examples"
+IUSE="cuda examples"
 
-RDEPEND=">=media-gfx/openscenegraph-2.8.0"
-DEPEND="$RDEPEND
-	>=dev-util/cmake-2.4.5"
+RDEPEND=">=media-gfx/openscenegraph-2.8.0
+	cuda? ( dev-util/nvidia-cuda-toolkit )"
+DEPEND="$RDEPEND"
 
 S=$WORKDIR/$MY_P
 
-src_configure() {
-	CMAKE_CONFIG="-DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release"
-	mkdir build
-	cd build
-	cmake ../ $CMAKE_CONFIG || die "Configure failed"
+src_prepare() {
+	epatch "${FILESDIR}"/${PV}-magicoff.patch
+	epatch "${FILESDIR}"/${PV}.patch
 }
 
-src_compile() {
-	cd build
-	emake || die "Compile failed"
+src_configure() {
+	mycmakeargs="${mycmakeargs} $(cmake-utils_use_enable cuda CUDA)"
+	cmake-utils_src_configure
 }
 
 src_install() {
-	cd build
-	emake DESTDIR=$D install || die "Install failed"
+	cmake-utils_src_install
 	if use examples ; then
 		exeinto /usr/share/osgPPU/bin
-		doexe bin/*
+		doexe $CMAKE_BUILD_DIR/bin/*
 		insinto /usr/share/osgPPU
-		doins -r ../Data
+		doins -r Data
 		dosym ../Data /usr/share/osgPPU/bin
 	fi
 }
