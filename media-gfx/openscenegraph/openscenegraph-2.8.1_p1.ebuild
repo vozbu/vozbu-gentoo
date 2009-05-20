@@ -9,9 +9,13 @@ DESCRIPTION="Open source high performance 3D graphics toolkit"
 HOMEPAGE="http://www.openscenegraph.org/projects/osg/"
 
 MY_PV=$(get_version_component_range 1-3)
-MY_RC=$(get_version_component_range 4)
-MY_P="OpenSceneGraph-${MY_PV}-${MY_RC}"
-SRC_URI="http://www.openscenegraph.org/downloads/developer_releases/${MY_P}.zip"
+MY_P="OpenSceneGraph-${MY_PV}"
+if [ $(get_version_component_range 3) -eq 0 ] ; then
+	MY_SERIES=$(get_version_component_range 1-2);
+else
+	MY_SERIES=$(get_version_component_range 1-3);
+fi
+SRC_URI="http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-${MY_SERIES}/source/${MY_P}.zip"
 
 LICENSE="wxWinLL-3 LGPL-2.1"
 SLOT="0"
