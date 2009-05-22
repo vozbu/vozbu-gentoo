@@ -1,0 +1,12 @@
+--- src/openalpp/AudioBase.cpp
++++ src/openalpp/AudioBase.cpp
+@@ -66,7 +66,8 @@
+ #if OPENAL_VERSION < 2005
+ 		device_=alcOpenDevice((/*const */ALubyte *)"'((direction \"write\")) '((devices '(alsa sdl native null)))");
+ #else // OPENAL_VERSION < 2005
+-		device_=alcOpenDevice("'((direction \"write\")) '((devices '(alsa sdl native null)))");
++		//device_=alcOpenDevice("'((direction \"write\")) '((devices '(alsa sdl native null)))");
++		device_=alcOpenDevice(NULL);
+ #endif // OPENAL_VERSION < 2005
+ #endif
+ 		if(!device_)
