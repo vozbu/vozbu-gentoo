@@ -1,16 +1,18 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="2"
 ETYPE="sources"
 K_WANT_GENPATCHES="base extras"
-K_GENPATCHES_VER="14"
+K_GENPATCHES_VER="6"
+K_DEBLOB_AVAILABLE="1"
 inherit kernel-2
 detect_version
 detect_arch
 
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="deblob"
 HOMEPAGE="http://www.linux.org.ru/wiki/en/Reiser4"
 
 DESCRIPTION="Full sources including the Gentoo patchset for the ${KV_MAJOR}.${KV_MINOR} kernel tree and reiser4 patchset from namesys"
