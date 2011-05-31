@@ -16,7 +16,11 @@ SLOT="4"
 
 IUSE="debug crypt"
 
-PATCHES=( "${FILESDIR}/${P}-crypt.patch" )
+PATCHES=(
+"${FILESDIR}/${P}-crypt.patch"
+"${FILESDIR}/${P}-tools.patch"
+"${FILESDIR}/${P}-integration-CMakeLists.patch"
+)
 
 src_unpack() {
 	git_src_unpack
