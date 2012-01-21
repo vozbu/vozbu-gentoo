@@ -18,7 +18,6 @@ IUSE="debug crypt"
 
 PATCHES=(
 "${FILESDIR}/${P}-crypt.patch"
-"${FILESDIR}/${P}-tools.patch"
 "${FILESDIR}/${P}-integration-CMakeLists.patch"
 )
 
