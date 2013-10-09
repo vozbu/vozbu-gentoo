@@ -1,10 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI=5
 
-inherit git
+inherit git-2
 
 DESCRIPTION="pidgin mail.ru plugin"
 
@@ -28,18 +28,18 @@ RDEPEND="
 DEPEND="
         ${DEPEND_COMMON}
         "
-src_unpack() {
-	git_src_unpack
-}
+#src_unpack() {
+#	git_src_unpack
+#}
 
-src_prepare() {
-	git clone $EGIT_REPO_URI
-}
+#src_prepare() {
+#	git clone $EGIT_REPO_URI
+#}
 
-src_compile() {
-	emake
-}
+#src_compile() {
+#	emake
+#}
 
-src_install() {
-	emake install DESTDIR="${D}" || die "make install failure"
-}
+#src_install() {
+#	emake install DESTDIR="${D}" || die "make install failure"
+#}
