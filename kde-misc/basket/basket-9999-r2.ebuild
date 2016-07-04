@@ -9,7 +9,6 @@ inherit git-2 kde4-base
 DESCRIPTION="A DropDrawers clone. Multiple information organizer"
 HOMEPAGE="http://basket.kde.org/"
 EGIT_REPO_URI="git://github.com/kelvie/basket.git"
-EGIT_COMMIT="d5ec89"
 
 LICENSE="GPL-2"
 KEYWORDS=""
@@ -19,7 +18,6 @@ IUSE="debug crypt"
 
 PATCHES=(
 "${FILESDIR}/${PN}-crypt.patch"
-"${FILESDIR}/${PN}-tools.patch"
 "${FILESDIR}/${PN}-integration-CMakeLists.patch"
 )
 
