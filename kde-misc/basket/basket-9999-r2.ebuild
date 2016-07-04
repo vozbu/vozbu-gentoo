@@ -2,28 +2,24 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="5"
+EAPI="6"
 
-inherit git-2 kde4-base
+inherit cmake-utils git-r3 kde5
 
 DESCRIPTION="A DropDrawers clone. Multiple information organizer"
 HOMEPAGE="http://basket.kde.org/"
-EGIT_REPO_URI="git://github.com/kelvie/basket.git"
+EGIT_REPO_URI="https://github.com/basket-notepads/basket.git"
+EGIT_BRANCH="kde5port"
 
 LICENSE="GPL-2"
 KEYWORDS=""
 SLOT="4"
 
-IUSE="debug crypt"
-
-PATCHES=(
-"${FILESDIR}/${PN}-crypt.patch"
-"${FILESDIR}/${PN}-integration-CMakeLists.patch"
-)
+IUSE="debug"
 
 src_configure() {
 	mycmakeargs=(
-		$(cmake-utils_use_enable crypt)
+		-DBASKET_DISABLE_GPG=ON
 	)
-	kde4-base_src_configure
+	kde5_src_configure
 }
