@@ -17,6 +17,10 @@ SLOT="4"
 
 IUSE="debug"
 
+DEPEND="
+	kde-frameworks/frameworkintegration
+"
+
 src_configure() {
 	mycmakeargs=(
 		-DBASKET_DISABLE_GPG=ON
