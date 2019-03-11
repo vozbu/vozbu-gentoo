@@ -9,7 +9,7 @@ inherit cmake-utils git-r3 kde5
 DESCRIPTION="A DropDrawers clone. Multiple information organizer"
 HOMEPAGE="http://basket.kde.org/"
 EGIT_REPO_URI="https://github.com/basket-notepads/basket.git"
-EGIT_BRANCH="kde5port"
+#EGIT_BRANCH="kde5port"
 
 LICENSE="GPL-2"
 KEYWORDS=""
