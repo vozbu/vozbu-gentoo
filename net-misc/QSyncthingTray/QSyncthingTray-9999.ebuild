@@ -20,9 +20,15 @@ IUSE=""
 DEPEND="dev-qt/qtwidgets:5
 		dev-qt/qtnetwork:5
 		dev-qt/qtprintsupport:5
-		dev-qt/qtwebengine:5
 		"
 RDEPEND="${DEPEND}"
+
+src_configure() {
+	local mycmakeargs=(
+			"-DQST_BUILD_NATIVEBROWSER=ON"
+	)
+	cmake-utils_src_configure
+}
 
 src_install() {
 	cmake-utils_src_install
