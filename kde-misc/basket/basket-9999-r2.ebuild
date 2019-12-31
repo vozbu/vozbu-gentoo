@@ -4,7 +4,7 @@
 
 EAPI="7"
 
-inherit cmake-utils git-r3 kde5
+inherit cmake git-r3 kde5
 
 DESCRIPTION="A DropDrawers clone. Multiple information organizer"
 HOMEPAGE="http://basket.kde.org/"
