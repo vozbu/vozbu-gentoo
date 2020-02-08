@@ -1,8 +1,0 @@
-DIST ksquirrel-libs-0.8.0.tar.bz2 1072484 RMD160 702a9c30f2e0323abe9c9e869ec9c3c6594a4ba5 SHA1 b3765e6b10c9399799ba77b234f1ce8d8b5c3185 SHA256 131df2e02bcb17fccf8e56a5142c127bfb6d2295ddcab7675626db6602d3947c
-EBUILD ksquirrel-libs-0.8.0.ebuild 1756 RMD160 be55f1635748e798f81c785af0acea26fb5ea45a SHA1 8e9f5f2ede5cb8ffa91bdf3f0f07c78aeeba428d SHA256 8ebb99a15fdc7e98836241d89e554301c5395774f664070f3d3cca35c9ee8ac8
-MD5 1c91c66c312f80cdab97edcd48706b83 ksquirrel-libs-0.8.0.ebuild 1756
-RMD160 be55f1635748e798f81c785af0acea26fb5ea45a ksquirrel-libs-0.8.0.ebuild 1756
-SHA256 8ebb99a15fdc7e98836241d89e554301c5395774f664070f3d3cca35c9ee8ac8 ksquirrel-libs-0.8.0.ebuild 1756
-MD5 998379ff0566a6140f6310ccb1f60b94 files/digest-ksquirrel-libs-0.8.0 268
-RMD160 adc638f3e45e960c4fc1a739f643b18c76e8cbf6 files/digest-ksquirrel-libs-0.8.0 268
-SHA256 88cc3d240fd43752f311d43bcded8dd513d80c8fa4b4a0dc7aa94ec74c68233c files/digest-ksquirrel-libs-0.8.0 268
