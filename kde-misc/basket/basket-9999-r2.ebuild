@@ -4,7 +4,7 @@
 
 EAPI="7"
 
-inherit cmake git-r3 kde5
+inherit ecm git-r3
 
 DESCRIPTION="A DropDrawers clone. Multiple information organizer"
 HOMEPAGE="http://basket.kde.org/"
@@ -22,8 +22,8 @@ DEPEND="
 "
 
 src_configure() {
-	mycmakeargs=(
+	local mycmakeargs=(
 		-DBASKET_DISABLE_GPG=ON
 	)
-	kde5_src_configure
+	ecm_src_configure
 }
