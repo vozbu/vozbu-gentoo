@@ -16,7 +16,9 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-S="${WORKDIR}"/"${P}"-Linux
+MY_PV="f3d-${PV}"
+
+S="${WORKDIR}"/"${MY_PV}"-Linux
 
 src_install() {
 	dodir "/usr"
