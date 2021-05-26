@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=5
-inherit eutils readme.gentoo systemd toolchain-funcs
+inherit eutils systemd toolchain-funcs
 
 MY_P=${P/-updater/}
 DESCRIPTION="no-ip.com dynamic DNS updater"
@@ -46,7 +46,6 @@ src_install() {
 	dodoc README.FIRST
 	newinitd "${FILESDIR}"/noip2.start noip
 	systemd_dounit "${FILESDIR}"/noip.service
-	readme.gentoo_create_doc
 }
 
 pkg_config() {
