@@ -44,7 +44,6 @@ src_compile() {
 src_install() {
 	dosbin noip2
 	dodoc README.FIRST
-	newinitd "${FILESDIR}"/noip2.start noip
 	systemd_dounit "${FILESDIR}"/noip.service
 }
 
