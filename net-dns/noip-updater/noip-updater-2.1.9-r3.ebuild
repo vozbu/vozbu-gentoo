@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 inherit eutils systemd toolchain-funcs
 
 MY_P=${P/-updater/}
@@ -28,6 +28,7 @@ DOC_CONTENTS="
 src_prepare() {
 	epatch "${FILESDIR}"/noip-2.1.9-flags.patch
 	epatch "${FILESDIR}"/noip-2.1.9-daemon.patch
+	eapply_user
 	sed -i \
 		-e "s:\(#define CONFIG_FILEPATH\).*:\1 \"/etc\":" \
 		-e "s:\(#define CONFIG_FILENAME\).*:\1 \"/etc/no-ip2.conf\":" \
