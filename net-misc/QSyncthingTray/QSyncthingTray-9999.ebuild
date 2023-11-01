@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit cmake-utils git-r3 eutils
+#inherit cmake-utils git-r3 eutils
 
 DESCRIPTION="A Traybar Application for Syncthing written in C++"
 HOMEPAGE="https://github.com/sieren/qsyncthingtray/"
