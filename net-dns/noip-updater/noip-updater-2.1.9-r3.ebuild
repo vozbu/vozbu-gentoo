@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=6
-inherit eutils systemd toolchain-funcs
+inherit systemd toolchain-funcs
 
 MY_P=${P/-updater/}
 DESCRIPTION="no-ip.com dynamic DNS updater"
